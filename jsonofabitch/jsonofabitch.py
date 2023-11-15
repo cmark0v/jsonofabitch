@@ -35,15 +35,20 @@ class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
         return s.strip('"').replace('\\"', '"')
+    
+    @v_args(inline=True)
+    def numb(self,s):
+        if '.' in s:
+            return float(s)
+        return int(s)
 
     tuple = tuple
     array = list
     pair = tuple
     object = dict
-    number = v_args(inline=True)(float)
+    number = v_args(inline=True)(numb)
 
     null = lambda self, _: None
-    seq = lambda self, _: ","
     true = lambda self, _: True
     false = lambda self, _: False
 
@@ -61,7 +66,9 @@ parse = json_parser.parse
 
 def loads(jsob_str: str) -> dict:
     """parses string of JSOB compliant content to a dict, numbers become floats, lists resolve to lists, nested JSOB becomes dicts, tuples resolve"""
-    return parse(jsob_str)
+    if ('=' in jsob_str)+(':' in jsob_str):
+        return parse(jsob_str)
+    return {}
 
 
 def dumps(jdict: dict) -> str:
@@ -112,7 +119,7 @@ def sonofadumps(data) -> str:
     def spew(numz):
         out = ""
         for j in numz:
-            out = out + randsp(0, 2) + sonofadumps(j) + ","
+            out = out + randsp(0, 2) + sonofadumps(j) + randsp(0, 2) + ","
         return out.rstrip(",") + randc()
 
     if type(data) is str:
@@ -120,9 +127,9 @@ def sonofadumps(data) -> str:
             return data
         else:
             return '"' + data + '"'
-    elif type(data) is float or type(data) is int:
+    elif type(data) is float:
         if random() > 0.3:
-            return str(data).rstrip(".0")
+            return str(data) + '0'*int(random()*2)
         else:
             return str(data)
     elif type(data) is list:
