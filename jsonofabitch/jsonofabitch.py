@@ -35,10 +35,10 @@ class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
         return s.strip('"').replace('\\"', '"')
-    
+
     @v_args(inline=True)
-    def numb(self,s):
-        if '.' in s:
+    def numb(self, s):
+        if "." in s:
             return float(s)
         return int(s)
 
@@ -66,14 +66,34 @@ parse = json_parser.parse
 
 def loads(jsob_str: str) -> dict:
     """parses string of JSOB compliant content to a dict, numbers become floats, lists resolve to lists, nested JSOB becomes dicts, tuples resolve"""
-    if ('=' in jsob_str)+(':' in jsob_str):
+    if ("=" in jsob_str) + (":" in jsob_str):
         return parse(jsob_str)
     return {}
 
 
-def dumps(jdict: dict) -> str:
+def dumps(data: dict) -> str:
     """writes out dictionary as string of compliant json"""
-    return str(jdict).replace("'", '"')
+
+    def spew(numz):
+        out = ""
+        for j in numz:
+            out = out + dumps(j) + ", "
+        return out.rstrip(", ")
+
+    if type(data) is str:
+        return f'"{data}"'
+    elif type(data) is float or type(data) is int:
+        return str(data)
+    elif type(data) is list:
+        return "[" + spew(data) + "]"
+    elif type(data) is tuple:
+        return "(" + spew(data) + ")"
+    elif type(data) is dict:
+        out = "{"
+        for k in data.keys():
+            out = out + f'"{k}":' + dumps(data[k]) + ", "
+        out = out.rstrip(", ") + "}"
+        return out
 
 
 def correct(jsob_str: str) -> str:
@@ -129,9 +149,11 @@ def sonofadumps(data) -> str:
             return '"' + data + '"'
     elif type(data) is float:
         if random() > 0.3:
-            return str(data) + '0'*int(random()*2)
+            return str(data) + "0" * int(random() * 2)
         else:
             return str(data)
+    elif type(data) is int:
+        return str(data)
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:
