@@ -1,3 +1,4 @@
+import re
 from setuptools import find_packages
 import os
 from distutils.core import setup
@@ -10,7 +11,7 @@ try:
 except Exception:
     long_description = ""
 (__version__,) = re.findall(
-    '__version__: str = "(.*)"', open("lark/__init__.py").read()
+    '__version__: str = "(.*)"', open("jsonofabitch/__init__.py").read()
 )
 
 setup(
