@@ -14,7 +14,7 @@ functions
 - ``loads()`` - loads JSOB to dict
 - ``dumps()`` - dumps regular json
 - ``correct()`` - turns JSOB to JSON 
-- ``sonofadump()`` - dumps stochastic JSOB
+- ``sonofadumps()`` - dumps stochastic JSOB
 
 JSOB syntax
 -----------
