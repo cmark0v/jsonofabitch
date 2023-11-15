@@ -26,7 +26,7 @@ JSOB syntax
 - ``'true' -> True`` ``'false' -> False`` ``'null' -> None case sensitive
 - tuples are enclosed in ``( )`` lists in ``[ ]`` trailing comma is okay. comma punctuated 
 - other - JSOB object resolves to dict, numbers resolve to floats, unquoted strings must be alphanumeric. only double quotes can be used
-- scientific notation ``2e4`` resolves to $2 \prod 10^4$
+- scientific notation ``2e4`` resolves to $2 * 10^4$
 
 
 
