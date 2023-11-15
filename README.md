@@ -23,7 +23,7 @@ JSOB syntax
 - keypairs -  ``:`` or ``=`` separate key value pairs, whitespace is ignored  
 - keys - quoted string or alphanumeric plus underscore, non-numeric first character(same as python vars)
 - values - another JSOB object, a tupple, a list, alphanumeric string without quotes, quote-enclosed string, boolean ``true`` ``false`` , ``null`` , numbers
-- ``'true' -> True`` ``'false' -> False`` ``'null' -> None case sensitive
+- ``'true' -> True`` ``'false' -> False`` ``'null' -> None`` case sensitive
 - tuples are enclosed in ``( )`` lists in ``[ ]`` trailing comma is okay. comma punctuated 
 - other - JSOB object resolves to dict, numbers resolve to floats, unquoted strings must be alphanumeric. only double quotes can be used
 - scientific notation ``2e4`` resolves to $2 * 10^4$
