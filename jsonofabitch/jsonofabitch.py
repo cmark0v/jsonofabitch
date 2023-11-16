@@ -15,9 +15,9 @@ json_grammar = r"""
           | "false"            -> false
           | "null"             -> null
 
-    array  : "[" [value ("," value )*] [","]"]"
-    tuple  : "(" [value ("," value )*] [","]")"
-    object : ["{"] pair [ ((","|";" ) pair )*] [","] ["}"|";"]
+    array  : "[" [value ( (","|";" )value )*] [","|";"]"]"
+    tuple  : "(" [value ( (","|";" ) value )*] [","|";"]")"
+    object : ["{"] pair [ ((","|";" ) pair )*] [","|";"] ["}"]
     pair   : string (":" | "=") value 
     
     string : CNAME|ESCAPED_STRING 

@@ -17,16 +17,16 @@ functions
 - ``dumpslob()`` - dumps stochastic JSLOB
 
 JSLOB syntax
------------
+------------
 
-- JSLOB objects can be enclosed in ``{ }`` brackets, but its not required, they can be terminated with ';'. 
-- keypairs -  ``:`` or ``=`` separate key value pairs, whitespace is ignored  
-- keys - quoted string or alphanumeric plus underscore, non-numeric first character(same as python vars). double quotes only
-- values - another JSLOB object, a tupple, a list, alphanumeric string without quotes, quote-enclosed string, boolean ``true`` ``false`` , ``null`` , numbers
-- keypairs in a JSLOB object are separated by ``;`` or ``,``, JSOB objects can be terminated by ``;;`` or ``;,`` when nested as values in keypairs or lists and unenclosed in brackets
+- keypairs -  ``:`` or ``=`` separate key value pairs, whitespace is ignored  ``'g=5' -> {"g": 5}`` and ``'g:5' -> {"g": 5}``
+- keypairs are separated by ``;`` or ``,``  in a JSLOB object, 
+- keys - double quoted string or alphanumeric plus underscore, non-numeric first character(same as python vars). 
+- values - another JSLOB object, a tupple, a list, alphanumeric string without quotes, quote-enclosed string, boolean ``true`` ``false`` , ``null`` , integers, floats
 - ``'true' -> True`` ``'false' -> False`` ``'null' -> None`` case sensitive
-- tuples are enclosed in ``( )`` lists in ``[ ]``  comma punctuated trailing comma is okay.
-- other - unquoted strings must be alphanumeric plus ``_``. only double quotes can be used
+- tuples in ``( )`` lists in ``[ ]`` objects separated by comma or semicolon. trailing comma/semicolon okay
+- dicts/JSLOB objects have keypairs separated by semicolon or comma, nested jslob objects are terminated and separated simultaneously by ``;;`` or ``,,`` , IE: ``'[g=5,h=3]' -> [{'g': 5, 'h': 3}]`` and ``'[g=5;;h=3]' -> [{'g': 5}, {'h': 3}]``
+- other - unquoted strings must be alphanumeric plus ``_`` non-numeric first character. only double quotes can be used
 - scientific notation ``2e4`` resolves to $2.0 * 10^4$, always resolve to float
 - numbers with decimal present resolve to floats while others resolve to ints IE ``'3.0' -> 3.0`` and ``'3' -> 3`` ``'3.' -> 3.0``
 
