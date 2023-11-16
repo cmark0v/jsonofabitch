@@ -38,7 +38,7 @@ class TreeToJson(Transformer):
 
     @v_args(inline=True)
     def numb(self, s):
-        if "." in s:
+        if "." in s or "e" in s:
             return float(s)
         return int(s)
 
@@ -71,13 +71,13 @@ def loads(jsob_str: str) -> dict:
     return {}
 
 
-def dumps(data: dict) -> str:
-    """writes out dictionary as string of compliant json"""
+def dumps(data: dict, tuples=False) -> str:
+    """writes out dictionary as string of compliant json, to dump tuples use tuples=True, otherwise they are converted to lists to comply with standard json"""
 
     def spew(numz):
         out = ""
         for j in numz:
-            out = out + dumps(j) + ", "
+            out = out + dumps(j, tuples=tuples) + ", "
         return out.rstrip(", ")
 
     if type(data) is str:
@@ -87,11 +87,14 @@ def dumps(data: dict) -> str:
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:
-        return "(" + spew(data) + ")"
+        if tuples:
+            return "(" + spew(data) + ")"
+        else:
+            return "[" + spew(data) + "]"
     elif type(data) is dict:
         out = "{"
         for k in data.keys():
-            out = out + f'"{k}":' + dumps(data[k]) + ", "
+            out = out + f'"{k}": ' + dumps(data[k], tuples=tuples) + ", "
         out = out.rstrip(", ") + "}"
         return out
 
@@ -143,8 +146,8 @@ def sonofadumps(data) -> str:
         return out.rstrip(",") + randc()
 
     if type(data) is str:
-        if data.isalnum():
-            return data
+        if not data[0].isdigit() and data.replace("_", "").isalnum():
+            return randq(data)
         else:
             return '"' + data + '"'
     elif type(data) is float:

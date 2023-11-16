@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "jsonofabitch_cmark0v" 
+version = "0.1.0"
+authors = [
+  { name="c mark0v", email="cmark0v@protonmail.com" },
+]
+description = "JSOB: Fault tolerant json parser. write like a JSLOB."
+readme = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: File Formats :: JSON",
+    "Topic :: Software Development :: Pre-processors",
+    "Topic :: File Formats",
+]
+[project.urls]
+"Homepage" = "https://github.com/cmark0v/jsonofabitch/"
