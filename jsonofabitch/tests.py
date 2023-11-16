@@ -40,7 +40,7 @@ class TestJSOB(unittest.TestCase):
 
     def test_empty_plus_lists(self):
         data = ["{}", "", "sdfsdf", "5", "[5,5]", "[d=5,h=3]", "[d=5;,h=3]"]
-        dout = [{}, {}, {}, {}, {}, [{"d": 5, "h": 3}], [{"d": 5}, {"h": 3}]]
+        dout = [{}, {}, 'sdfsdf', 5, [5,5], [{"d": 5, "h": 3}], [{"d": 5}, {"h": 3}]]
         for j, d in enumerate(data):
             self.assertEqual(jsob.loads(d), dout[j])
 
@@ -66,11 +66,11 @@ class TestJSOB(unittest.TestCase):
             di = jsob.loads(d)
             self.assertEqual(jsob.loads(jsob.dumps(di, tuples=True)), di)
 
-    def test_sonofadumps(self):
+    def test_dumpslob(self):
         for j in range(500):
             for d in datajsob:
                 di = jsob.loads(d)
-                du = jsob.sonofadumps(di)
+                du = jsob.dumpslob(di)
                 try:
                     self.assertEqual(jsob.loads(du), di)
                 except Exception as e:

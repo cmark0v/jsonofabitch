@@ -21,7 +21,7 @@ setup(
     version=__version__,
     license="MIT",
     # Short description of your library
-    description="JSLOB: sloppy json parser. error correcting json parser. standarized low standards",
+    description="JSOB: Fault tolerant JSON parser. A standardization of low standards. Be a JSLOB.",
     # Long description of your library
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -40,7 +40,7 @@ setup(
         "linter",
         "autocorrect",
         "formatter",
-        "slob",
+        "jslob",
         "user input",
     ],
     # List of packages to install with this one

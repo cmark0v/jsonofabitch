@@ -65,15 +65,14 @@ parse = json_parser.parse
 
 
 def loads(jsob_str: str) -> dict:
-    """parses string of JSOB compliant content to a dict, numbers become floats, lists resolve to lists, nested JSOB becomes dicts, tuples resolve"""
-    if ("=" in jsob_str) + (":" in jsob_str):
-        return parse(jsob_str)
-    return {}
+    """parses string of JSLOB compliant content"""
+    if jsob_str in ['{}',';','{;','{;}','{','']:
+        return {}
+    return parse(jsob_str)
 
 
 def dumps(data: dict, tuples=False) -> str:
-    """writes out dictionary as string of compliant json, to dump tuples use tuples=True, otherwise they are converted to lists to comply with standard json"""
-
+    """writes out dictionary as string of compliant json, to dump tuples use tuples=True, otherwise they are converted to lists to comply with standard python ``json.loads()``"""
     def spew(numz):
         out = ""
         for j in numz:
@@ -100,7 +99,7 @@ def dumps(data: dict, tuples=False) -> str:
 
 
 def correct(jsob_str: str) -> str:
-    """reads JSOB compliant syntax and outputs JSON compliant syntax"""
+    """reads JSLOB compliant syntax and outputs JSON compliant syntax"""
     return dumps(parse(jsob_str))
 
 
@@ -138,11 +137,12 @@ def randq(s, p=0.5):
         return s
 
 
-def sonofadumps(data) -> str:
+def dumpslob(data) -> str:
+    """**dump** **s**tochastically **l**acerated **ob**jects. dumps stoachastically perterbed JSLOB"""
     def spew(numz):
         out = ""
         for j in numz:
-            out = out + randsp(0, 2) + sonofadumps(j) + randsp(0, 2) + ","
+            out = out + randsp(0, 2) + dumpslob(j) + randsp(0, 2) + ","
         return out.rstrip(",") + randc()
 
     if type(data) is str:
@@ -173,7 +173,7 @@ def sonofadumps(data) -> str:
                 + randq(k)
                 + randl()
                 + randsp()
-                + str(sonofadumps(data[k]))
+                + str(dumpslob(data[k]))
                 + randc(col=True)
             )
         out = out[0:-1] + randend()
@@ -184,5 +184,5 @@ __all__ = (
     "loads",
     "dumps",
     "correct",
-    "sonofadumps",
+    "dumpslob",
 )

@@ -11,19 +11,19 @@
 functions
 ---------
 
-- ``loads()`` - loads JSOB to dict
-- ``dumps()`` - dumps regular json
-- ``correct()`` - turns JSOB to JSON 
-- ``sonofadumps()`` - dumps stochastic JSOB
+- ``loads()`` - loads JSLOB compliant text 
+- ``dumps()`` - dumps regular JSON
+- ``correct()`` - turns JSLOB to JSON 
+- ``dumpslob()`` - dumps stochastic JSLOB
 
-JSOB syntax
+JSLOB syntax
 -----------
 
-- JSOB objects can be enclosed in ``{ }`` brackets, but its not required, they can be terminated with ';' 
+- JSLOB objects can be enclosed in ``{ }`` brackets, but its not required, they can be terminated with ';'. 
 - keypairs -  ``:`` or ``=`` separate key value pairs, whitespace is ignored  
 - keys - quoted string or alphanumeric plus underscore, non-numeric first character(same as python vars). double quotes only
-- values - another JSOB object, a tupple, a list, alphanumeric string without quotes, quote-enclosed string, boolean ``true`` ``false`` , ``null`` , numbers
-- keypairs in a JSOB object are separated by ``;`` or ``,``, JSOB objects can be terminated by ``;;`` or ``;,`` when nested as values in keypairs or lists and unenclosed in brackets
+- values - another JSLOB object, a tupple, a list, alphanumeric string without quotes, quote-enclosed string, boolean ``true`` ``false`` , ``null`` , numbers
+- keypairs in a JSLOB object are separated by ``;`` or ``,``, JSOB objects can be terminated by ``;;`` or ``;,`` when nested as values in keypairs or lists and unenclosed in brackets
 - ``'true' -> True`` ``'false' -> False`` ``'null' -> None`` case sensitive
 - tuples are enclosed in ``( )`` lists in ``[ ]``  comma punctuated trailing comma is okay.
 - other - unquoted strings must be alphanumeric plus ``_``. only double quotes can be used
@@ -34,6 +34,29 @@ JSOB syntax
 conventions
 -----------
 
-called JSOB(*jay-sawb*) or JSLOB in polite company
+- the software is called JSOB(*jay-sawb*) in polite company
+- the standardized syntax is called JSLOB (*jay-slawb*)
+- suggested file extension ``.jslob`` or ``.slob`` or ``.jsob`` 
 
-suggested file extension ``.sob`` or ``.jsob`` 
+
+
+examples
+--------
+
+```python
+import jsonofabitch as jsob
+d = jsob.loads("f=5, size=big, style=SLOB, coord=[(3,4),(1.2,3)]")
+#{'f': 5, 'size': 'big', 'style': 'SLOB', 'coord': [(3, 4), (1.2, 3)]}
+
+jsob.dumps(d)
+#Out[3]: '{"f": 5, "size": "big", "style": "SLOB", "coord": [[3, 4], [1.2, 3]]}'
+
+jsob.dumpslob(d)
+#Out[4]: ' "f"=  5;  "size"="big";style=  "SLOB";  coord: [ (3 ,4 ), (1.2, 3,)  ];'
+
+jsob.dumpslob(d)
+#Out[5]: ' "f"= 5;size="big", style: SLOB, "coord": [ (3, 4 ),(1.2 , 3  ) ];'
+
+jsob.dumpslob(d)
+#Out[6]: ' "f"= 5,  size=  "big",style=  "SLOB";  coord:  [ (3,4 ,) ,(1.2 , 3,)  ];'
+```

@@ -4,12 +4,11 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "jsonofabitch_cmark0v" 
-version = "0.1.0"
+name = "jsonofabitch" 
+dynamic=["version","license","keywords","description"]
 authors = [
   { name="c mark0v", email="cmark0v@protonmail.com" },
 ]
-description = "JSOB: Fault tolerant json parser. write like a JSLOB."
 readme = "README.md"
 requires-python = ">=3.6"
 classifiers = [
