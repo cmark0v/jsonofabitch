@@ -1,6 +1,6 @@
 import sys
 
-from lark import Lark, Transformer, v_args
+from jark import Lark_StandAlone, Transformer, v_args
 from random import random
 
 json_grammar = r"""
@@ -52,15 +52,15 @@ class TreeToJson(Transformer):
     true = lambda self, _: True
     false = lambda self, _: False
 
-
-json_parser = Lark(
-    json_grammar,
-    parser="lalr",
-    lexer="basic",
-    propagate_positions=False,
-    maybe_placeholders=False,
-    transformer=TreeToJson(),
-)
+json_parser = Lark_StandAlone(transformer=TreeToJson())
+#json_parser = Lark(
+#    json_grammar,
+#    parser="lalr",
+#    lexer="basic",
+#    propagate_positions=False,
+#    maybe_placeholders=False,
+#    transformer=TreeToJson(),
+#)
 parse = json_parser.parse
 
 
