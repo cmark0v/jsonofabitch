@@ -1,6 +1,6 @@
 import sys
 
-from jark import Lark_StandAlone, Transformer, v_args
+from jsob import Lark_StandAlone, Transformer, v_args
 from random import random
 
 json_grammar = r"""
@@ -138,7 +138,7 @@ def randq(s, p=0.5):
 
 
 def dumpslob(data) -> str:
-    """**dump** **s**tochastically **l**acerated **ob**jects. dumps stoachastically perterbed JSLOB"""
+    """Dump Stochastically Lacerated Objects. dumps stoachastically perterbed JSLOB compliant text from tuple, list, dict"""
     def spew(numz):
         out = ""
         for j in numz:
