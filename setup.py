@@ -3,7 +3,7 @@ import re
 # from setuptools import find_packages
 import os
 from setuptools import setup
-from setuptools.command.build_py import build_py 
+from setuptools.command.build_py import build_py
 
 # User-friendly description from README.md
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -21,12 +21,10 @@ class jsob_build(build_py):
     def run(self):
         from lark import Lark
         from lark.tools import standalone
-        g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"),'r')
+
+        g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"), "r")
         o = open(os.path.join(current_directory, "jsonofabitch/parser/jsob.py"), "w")
-        L = Lark(
-            g.read(),
-            parser='lalr'
-        )
+        L = Lark(g.read(), parser="lalr")
         standalone.gen_standalone(L, out=o)
         o.close()
         g.close()
@@ -75,6 +73,7 @@ setup(
     requires=[],
     packages=[
         "jsonofabitch",
+        "jsonofabitch.parser",
     ],
     cmdclass={"build_py": jsob_build},
     package_data={
