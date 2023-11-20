@@ -22,7 +22,7 @@ class jsob_build(build_py):
         from lark import Lark
         from lark.tools import standalone
         g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"),'r')
-        o = open(os.path.join(current_directory, "jsonofabitch/jsob.py"), "w")
+        o = open(os.path.join(current_directory, "jsonofabitch/parser/jsob.py"), "w")
         L = Lark(
             g.read(),
             parser='lalr'
