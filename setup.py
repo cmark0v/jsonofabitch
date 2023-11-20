@@ -19,16 +19,18 @@ except Exception:
 
 class jsob_build(build):
     def run(self):
-        build.run(self)
-        import lark
+        from lark import Lark
         from lark.tools import standalone
-
+        g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"),'r')
         o = open(os.path.join(current_directory, "jsonofabitch/jsob.py"), "w")
-        L = lark.Lark.open(
-            os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"),
-            parser="lalr",
+        L = Lark(
+            g.read(),
+            parser='lalr'
         )
         standalone.gen_standalone(L, out=o)
+        o.close()
+        g.close()
+        build.run(self)
 
 
 setup(
@@ -75,6 +77,8 @@ setup(
         "jsonofabitch",
     ],
     cmdclass={"build": jsob_build},
-    package_data={'': [os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark")]},
+    package_data={
+        "": [os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark")]
+    },
     include_package_data=True,
 )

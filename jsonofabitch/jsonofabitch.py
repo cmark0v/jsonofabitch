@@ -1,6 +1,6 @@
 import sys
 
-from jsob import Lark_StandAlone, Transformer, v_args
+from .jsob import Lark_StandAlone, Transformer, v_args
 from random import random
 
 json_grammar = r"""
