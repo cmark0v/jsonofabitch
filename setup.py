@@ -23,7 +23,7 @@ class jsob_build(build_py):
         from lark.tools import standalone
 
         g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"), "r")
-        o = open(os.path.join(current_directory, "jsonofabitch/parser/jsob.py"), "w")
+        o = open(os.path.join(current_directory, "jsonofabitch/jsob.py"), "w")
         L = Lark(g.read(), parser="lalr")
         standalone.gen_standalone(L, out=o)
         o.close()
@@ -73,7 +73,6 @@ setup(
     requires=[],
     packages=[
         "jsonofabitch",
-        "jsonofabitch.parser",
     ],
     cmdclass={"build_py": jsob_build},
     package_data={

@@ -1,6 +1,13 @@
 import sys
 
-from .parser.jsob import Lark_StandAlone, Transformer, v_args
+__all__ = (
+    "loads",
+    "dumps",
+    "correct",
+    "dumpslob",
+)
+
+from .jsob import Lark_StandAlone, Transformer, v_args
 from random import random
 
 json_grammar = r"""
@@ -52,27 +59,29 @@ class TreeToJson(Transformer):
     true = lambda self, _: True
     false = lambda self, _: False
 
+
 json_parser = Lark_StandAlone(transformer=TreeToJson())
-#json_parser = Lark(
+# json_parser = Lark(
 #    json_grammar,
 #    parser="lalr",
 #    lexer="basic",
 #    propagate_positions=False,
 #    maybe_placeholders=False,
 #    transformer=TreeToJson(),
-#)
+# )
 parse = json_parser.parse
 
 
 def loads(jsob_str: str) -> dict:
     """parses string of JSLOB compliant content"""
-    if jsob_str in ['{}',';','{;','{;}','{','']:
+    if jsob_str in ["{}", ";", "{;", "{;}", "{", ""]:
         return {}
     return parse(jsob_str)
 
 
 def dumps(data: dict, tuples=False) -> str:
     """writes out dictionary as string of compliant json, to dump tuples use tuples=True, otherwise they are converted to lists to comply with standard python ``json.loads()``"""
+
     def spew(numz):
         out = ""
         for j in numz:
@@ -139,6 +148,7 @@ def randq(s, p=0.5):
 
 def dumpslob(data) -> str:
     """Dump Stochastically Lacerated Objects. dumps stoachastically perterbed JSLOB compliant text from tuple, list, dict"""
+
     def spew(numz):
         out = ""
         for j in numz:

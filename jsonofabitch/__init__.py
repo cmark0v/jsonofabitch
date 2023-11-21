@@ -8,11 +8,6 @@ sloppy json parser. messy json parser. error correcting json parser. standarizat
 
 __version__: str = "0.3.0"
 
-from .jsonofabitch import *
-__all__ = (
-    "loads",
-    "dumps",
-    "correct",
-    "dumpslob",
-)
 
+from .jsonofabitch import __all__
+from .jsonofabitch import *
