@@ -1,4 +1,7 @@
+*.swp
 *.egg-*
 __pycache__
 */__pycache__
 dist/
+build
+jsonofabitch/jsob.py

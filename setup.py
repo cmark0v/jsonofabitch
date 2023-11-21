@@ -1,7 +1,9 @@
 import re
-from setuptools import find_packages
+
+# from setuptools import find_packages
 import os
-from distutils.core import setup
+from setuptools import setup
+from setuptools.command.build_py import build_py
 
 # User-friendly description from README.md
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +15,21 @@ except Exception:
 (__version__,) = re.findall(
     '__version__: str = "(.*)"', open("jsonofabitch/__init__.py").read()
 )
+
+
+class jsob_build(build_py):
+    def run(self):
+        from lark import Lark
+        from lark.tools import standalone
+
+        g = open(os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark"), "r")
+        o = open(os.path.join(current_directory, "jsonofabitch/jsob.py"), "w")
+        L = Lark(g.read(), parser="lalr")
+        standalone.gen_standalone(L, out=o)
+        o.close()
+        g.close()
+        build_py.run(self)
+
 
 setup(
     # Name of the package
@@ -53,10 +70,13 @@ setup(
         "Topic :: File Formats",
     ],
     install_requires=[],
-    requires=[
-        "lark",
-    ],
+    requires=[],
     packages=[
         "jsonofabitch",
     ],
+    cmdclass={"build_py": jsob_build},
+    package_data={
+        "": [os.path.join(current_directory, "jsonofabitch/jsonofabitch.lark")]
+    },
+    include_package_data=True,
 )
