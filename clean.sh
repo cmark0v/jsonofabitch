@@ -6,3 +6,4 @@ rm jsonofabitch/parser/jsob.py
 rm -rf ./jsonofabitch/parser/__pycache__
 rm -rf ./jsonofabitch/__pycache__
 rm -rf ./__pycache__
+rm -rf ./tests/__pycache__
