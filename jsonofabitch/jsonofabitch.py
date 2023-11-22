@@ -41,7 +41,7 @@ json_grammar = r"""
 class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
-        return s.strip('"').replace('\\"', '"')
+        return s.replace('"', '\\"').rstrip('"').strip('\\').lstrip('"').replace('\\\\"','"')
 
     @v_args(inline=True)
     def numb(self, s):
@@ -89,7 +89,7 @@ def dumps(data: dict, tuples=False) -> str:
         return out.rstrip(", ")
 
     if type(data) is str:
-        return f'"{data}"'
+        return '"' +  data.replace('"', '\\"') + '"'
     elif type(data) is float or type(data) is int:
         return str(data)
     elif type(data) is list:
@@ -140,8 +140,8 @@ def randend():
 
 
 def randq(s, p=0.5):
-    if random() > p or not s.isalnum():
-        return '"' + s + '"'
+    if random() > p or s[0].isdigit() or not s.replace("_", "").isalnum():
+        return '"' + s.replace('"', '\\"') + '"'
     else:
         return s
 
@@ -156,15 +156,9 @@ def dumpslob(data) -> str:
         return out.rstrip(",") + randc()
 
     if type(data) is str:
-        if not data[0].isdigit() and data.replace("_", "").isalnum():
-            return randq(data)
-        else:
-            return '"' + data + '"'
+        return randq(data)
     elif type(data) is float:
-        if random() > 0.3:
-            return str(data) + "0" * int(random() * 2)
-        else:
-            return str(data)
+        return str(data).rstrip("0") + "0" * int(random() * 3)
     elif type(data) is int:
         return str(data)
     elif type(data) is list:

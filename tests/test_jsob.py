@@ -92,8 +92,9 @@ class TestJSOB(unittest.TestCase):
             "d=true",
             "d=false",
             "d=null",
+            'd="nu\\"ll"',
         ]
-        dout = [3000.0, True, False, None]
+        dout = [3000.0, True, False, None,'nu"ll']
         for j, d in enumerate(data):
             self.assertEqual(jsob.loads(d)["d"], dout[j])
 
@@ -108,6 +109,19 @@ class TestJSOB(unittest.TestCase):
             di = jsob.loads(d)
             self.assertEqual(jsob.loads(jsob.dumps(di, tuples=True)), di)
 
+    def test_quotes(self):
+        for d in ['f""f', 'ddfsd"ff', {"b": 'ggg"'}]:
+            try:
+                self.assertEqual(jsob.loads(jsob.dumps(d)), d)
+            except Exception as e:
+                print(" dumps FAILING STRING: ", d)
+                raise (e)
+            try:
+                self.assertEqual(jsob.loads(jsob.dumpslob(d)), d)
+            except Exception as e:
+                print("dumpslob FAILING STRING: ", d)
+                raise (e)
+
     def test_dumpslob(self):
         for j in range(500):
             for d in datajsob:
@@ -118,6 +132,7 @@ class TestJSOB(unittest.TestCase):
                 except Exception as e:
                     print("SONOFADUMPS FAILING STRING: ", du)
                     raise (e)
+
 
 if __name__ == "__main__":
     unittest.main()
