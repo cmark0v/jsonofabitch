@@ -10,33 +10,6 @@ __all__ = (
 from .jsob import Lark_StandAlone, Transformer, v_args
 from random import random
 
-json_grammar = r"""
-    ?start: value
-
-    ?value: object
-          | array
-          | tuple
-          | string
-          | SIGNED_NUMBER      -> number
-          | "true"             -> true
-          | "false"            -> false
-          | "null"             -> null
-
-    array  : "[" [value ( (","|";" )value )*] [","|";"]"]"
-    tuple  : "(" [value ( (","|";" ) value )*] [","|";"]")"
-    object : ["{"] pair [ ((","|";" ) pair )*] [","|";"] ["}"]
-    pair   : string (":" | "=") value 
-    
-    string : CNAME|ESCAPED_STRING 
-
-    %import common.CNAME
-    %import common.ESCAPED_STRING
-    %import common.SIGNED_NUMBER
-    %import common.WS
-
-    %ignore WS
-"""
-
 
 class TreeToJson(Transformer):
     @v_args(inline=True)
@@ -61,14 +34,7 @@ class TreeToJson(Transformer):
 
 
 json_parser = Lark_StandAlone(transformer=TreeToJson())
-# json_parser = Lark(
-#    json_grammar,
-#    parser="lalr",
-#    lexer="basic",
-#    propagate_positions=False,
-#    maybe_placeholders=False,
-#    transformer=TreeToJson(),
-# )
+
 parse = json_parser.parse
 
 
@@ -92,6 +58,12 @@ def dumps(data: dict, tuples=False) -> str:
         return '"' +  data.replace('"', '\\"') + '"'
     elif type(data) is float or type(data) is int:
         return str(data)
+    elif data is None:
+        return "null"
+    elif data is True:
+        return "true"
+    elif data is False:
+        return "false"
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:
@@ -154,13 +126,19 @@ def dumpslob(data) -> str:
         for j in numz:
             out = out + randsp(0, 2) + dumpslob(j) + randsp(0, 2) + ","
         return out.rstrip(",") + randc()
-
+    
     if type(data) is str:
         return randq(data)
     elif type(data) is float:
         return str(data).rstrip("0") + "0" * int(random() * 3)
     elif type(data) is int:
         return str(data)
+    elif data is None:
+        return "null"
+    elif data is True:
+        return "true"
+    elif data is False:
+        return "false"
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:

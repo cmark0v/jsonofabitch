@@ -94,7 +94,7 @@ class TestJSOB(unittest.TestCase):
             "d=null",
             'd="nu\\"ll"',
         ]
-        dout = [3000.0, True, False, None,'nu"ll']
+        dout = [3000.0, True, False, None, 'nu"ll']
         for j, d in enumerate(data):
             self.assertEqual(jsob.loads(d)["d"], dout[j])
 
@@ -108,6 +108,33 @@ class TestJSOB(unittest.TestCase):
         for d in datajsob:
             di = jsob.loads(d)
             self.assertEqual(jsob.loads(jsob.dumps(di, tuples=True)), di)
+
+    def test_dumps(self):
+        data = [
+            "d=3.0e3",
+            "d=true",
+            "d=false",
+            "d=null",
+            "[5,5]",
+            "[d=5,h=3]",
+            "[d=5;,h=3]",
+            "[d=5,,h=3,]",
+            "[d=5;;h=3]",
+            "(d=5;;h=3)",
+            'd="nu\\"ll"',
+        ]
+        for d in data:
+            ld = jsob.loads(d)
+            try:
+                self.assertEqual(jsob.loads(jsob.dumps(ld,tuples=True)), ld)
+            except Exception as e:
+                print(" dumps FAILING STRING: ", d)
+                raise (e)
+            try:
+                self.assertEqual(jsob.loads(jsob.dumpslob(ld)), ld)
+            except Exception as e:
+                print("dumpslob FAILING STRING: ", d)
+                raise (e)
 
     def test_quotes(self):
         for d in ['f""f', 'ddfsd"ff', {"b": 'ggg"'}]:
