@@ -44,6 +44,11 @@ class TestJSOB(unittest.TestCase):
         data = [
             "{}",
             "",
+            ";",
+            "{;",
+            "{;}",
+            "[]",
+            "()",
             "sdfsdf",
             "5",
             "[5,5]",
@@ -61,10 +66,16 @@ class TestJSOB(unittest.TestCase):
             "{d:d=5,h=3,}",
             "{d:d=5,,h=3,}",
             "d=d:5;;h=3",
+            "d={}",
         ]
         dout = [
             {},
             {},
+            {},
+            {},
+            {},
+            [],
+            (),
             "sdfsdf",
             5,
             [5, 5],
@@ -82,9 +93,14 @@ class TestJSOB(unittest.TestCase):
             {"d": {"d": 5, "h": 3}},
             {"d": {"d": 5}, "h": 3},
             {"d": {"d": 5}, "h": 3},
+            {"d": {}},
         ]
         for j, d in enumerate(data):
-            self.assertEqual(jsob.loads(d), dout[j])
+            try:
+                self.assertEqual(jsob.loads(d), dout[j])
+            except:
+                print("failed on: ", d)
+                raise
 
     def test_special(self):
         data = [
@@ -126,7 +142,7 @@ class TestJSOB(unittest.TestCase):
         for d in data:
             ld = jsob.loads(d)
             try:
-                self.assertEqual(jsob.loads(jsob.dumps(ld,tuples=True)), ld)
+                self.assertEqual(jsob.loads(jsob.dumps(ld, tuples=True)), ld)
             except Exception as e:
                 print(" dumps FAILING STRING: ", d)
                 raise (e)

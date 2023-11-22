@@ -14,7 +14,13 @@ from random import random
 class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
-        return s.replace('"', '\\"').rstrip('"').strip('\\').lstrip('"').replace('\\\\"','"')
+        return (
+            s.replace('"', '\\"')
+            .rstrip('"')
+            .strip("\\")
+            .lstrip('"')
+            .replace('\\\\"', '"')
+        )
 
     @v_args(inline=True)
     def numb(self, s):
@@ -22,10 +28,29 @@ class TreeToJson(Transformer):
             return float(s)
         return int(s)
 
-    tuple = tuple
-    array = list
+    def duct(self, s):
+        try:
+            return dict(s)
+        except TypeError:
+             return {}
+
+    def tup(self,s):
+        if tuple(s) == (None,):
+            return ()
+        else:
+            return tuple(s)
+
+    def lis(self,s):
+        if list(s) == [None]:
+            return []
+        else:
+            return list(s)
+
+
+    tuple = tup
+    array = lis
     pair = tuple
-    object = dict
+    object = duct
     number = v_args(inline=True)(numb)
 
     null = lambda self, _: None
@@ -40,8 +65,6 @@ parse = json_parser.parse
 
 def loads(jsob_str: str) -> dict:
     """parses string of JSLOB compliant content"""
-    if jsob_str in ["{}", ";", "{;", "{;}", "{", ""]:
-        return {}
     return parse(jsob_str)
 
 
@@ -55,7 +78,7 @@ def dumps(data: dict, tuples=False) -> str:
         return out.rstrip(", ")
 
     if type(data) is str:
-        return '"' +  data.replace('"', '\\"') + '"'
+        return '"' + data.replace('"', '\\"') + '"'
     elif type(data) is float or type(data) is int:
         return str(data)
     elif data is None:
@@ -74,7 +97,8 @@ def dumps(data: dict, tuples=False) -> str:
     elif type(data) is dict:
         out = "{"
         for k in data.keys():
-            out = out + f'"{k}": ' + dumps(data[k], tuples=tuples) + ", "
+            kstr = str(k)
+            out = out + f'"{kstr}": ' + dumps(data[k], tuples=tuples) + ", "
         out = out.rstrip(", ") + "}"
         return out
 
@@ -126,7 +150,7 @@ def dumpslob(data) -> str:
         for j in numz:
             out = out + randsp(0, 2) + dumpslob(j) + randsp(0, 2) + ","
         return out.rstrip(",") + randc()
-    
+
     if type(data) is str:
         return randq(data)
     elif type(data) is float:

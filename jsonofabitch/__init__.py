@@ -45,7 +45,7 @@ jsob.dumpslob(d)
 ```
 """
 
-__version__: str = "0.3.2"
+__version__: str = "0.3.5"
 
 
 from .jsonofabitch import __all__
