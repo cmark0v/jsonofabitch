@@ -14,9 +14,12 @@
     object : ["{"] pair [ ((","|";" ) pair )*] [","|";"] ["}"]
     pair   : string (":" | "=") value 
     
-    string : CNAME|ESCAPED_STRING 
-
+    UQSPECIAL : "_" | "-" | "~" | "$" | "@" | "&" | "?" | "." | "%"
+    UQSTRING : (UQSPECIAL|LETTER) (UQSPECIAL|LETTER|DIGIT)*
+    string : ESCAPED_STRING|UQSTRING
     %import common.CNAME
+    %import common.DIGIT
+    %import common.LETTER
     %import common.ESCAPED_STRING
     %import common.SIGNED_NUMBER
     %import common.WS
