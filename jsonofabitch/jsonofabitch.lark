@@ -11,7 +11,7 @@
 
     array  : "[" [value ( (","|";" )value )*] [","|";"]"]"
     tuple  : "(" [value ( (","|";" ) value )*] [","|";"]")"
-    object : ["{"] pair [ ((","|";" ) pair )*] [","|";"] ["}"]
+    object : ["{"] [pair ( (","|";" ) pair )*] [","|";"] ["}"]
     pair   : string (":" | "=") value 
     
     UQSPECIAL : "_" | "-" | "~" | "$" | "@" | "&" | "?" | "." | "%"

@@ -10,38 +10,17 @@ __all__ = (
 from .jsob import Lark_StandAlone, Transformer, v_args
 from random import random
 
-json_grammar = r"""
-    ?start: value
-
-    ?value: object
-          | array
-          | tuple
-          | string
-          | SIGNED_NUMBER      -> number
-          | "true"             -> true
-          | "false"            -> false
-          | "null"             -> null
-
-    array  : "[" [value ( (","|";" )value )*] [","|";"]"]"
-    tuple  : "(" [value ( (","|";" ) value )*] [","|";"]")"
-    object : ["{"] pair [ ((","|";" ) pair )*] [","|";"] ["}"]
-    pair   : string (":" | "=") value 
-    
-    string : CNAME|ESCAPED_STRING 
-
-    %import common.CNAME
-    %import common.ESCAPED_STRING
-    %import common.SIGNED_NUMBER
-    %import common.WS
-
-    %ignore WS
-"""
-
 
 class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
-        return s.strip('"').replace('\\"', '"')
+        return (
+            s.replace('"', '\\"')
+            .rstrip('"')
+            .strip("\\")
+            .lstrip('"')
+            .replace('\\\\"', '"')
+        )
 
     @v_args(inline=True)
     def numb(self, s):
@@ -49,10 +28,29 @@ class TreeToJson(Transformer):
             return float(s)
         return int(s)
 
-    tuple = tuple
-    array = list
+    def duct(self, s):
+        try:
+            return dict(s)
+        except TypeError:
+             return {}
+
+    def tup(self,s):
+        if tuple(s) == (None,):
+            return ()
+        else:
+            return tuple(s)
+
+    def lis(self,s):
+        if list(s) == [None]:
+            return []
+        else:
+            return list(s)
+
+
+    tuple = tup
+    array = lis
     pair = tuple
-    object = dict
+    object = duct
     number = v_args(inline=True)(numb)
 
     null = lambda self, _: None
@@ -61,21 +59,12 @@ class TreeToJson(Transformer):
 
 
 json_parser = Lark_StandAlone(transformer=TreeToJson())
-# json_parser = Lark(
-#    json_grammar,
-#    parser="lalr",
-#    lexer="basic",
-#    propagate_positions=False,
-#    maybe_placeholders=False,
-#    transformer=TreeToJson(),
-# )
+
 parse = json_parser.parse
 
 
 def loads(jsob_str: str) -> dict:
     """parses string of JSLOB compliant content"""
-    if jsob_str in ["{}", ";", "{;", "{;}", "{", ""]:
-        return {}
     return parse(jsob_str)
 
 
@@ -89,9 +78,15 @@ def dumps(data: dict, tuples=False) -> str:
         return out.rstrip(", ")
 
     if type(data) is str:
-        return f'"{data}"'
+        return '"' + data.replace('"', '\\"') + '"'
     elif type(data) is float or type(data) is int:
         return str(data)
+    elif data is None:
+        return "null"
+    elif data is True:
+        return "true"
+    elif data is False:
+        return "false"
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:
@@ -102,7 +97,8 @@ def dumps(data: dict, tuples=False) -> str:
     elif type(data) is dict:
         out = "{"
         for k in data.keys():
-            out = out + f'"{k}": ' + dumps(data[k], tuples=tuples) + ", "
+            kstr = str(k)
+            out = out + f'"{kstr}": ' + dumps(data[k], tuples=tuples) + ", "
         out = out.rstrip(", ") + "}"
         return out
 
@@ -140,8 +136,8 @@ def randend():
 
 
 def randq(s, p=0.5):
-    if random() > p or not s.isalnum():
-        return '"' + s + '"'
+    if random() > p or s[0].isdigit() or not s.replace("_", "").isalnum():
+        return '"' + s.replace('"', '\\"') + '"'
     else:
         return s
 
@@ -156,17 +152,17 @@ def dumpslob(data) -> str:
         return out.rstrip(",") + randc()
 
     if type(data) is str:
-        if not data[0].isdigit() and data.replace("_", "").isalnum():
-            return randq(data)
-        else:
-            return '"' + data + '"'
+        return randq(data)
     elif type(data) is float:
-        if random() > 0.3:
-            return str(data) + "0" * int(random() * 2)
-        else:
-            return str(data)
+        return str(data).rstrip("0") + "0" * int(random() * 3)
     elif type(data) is int:
         return str(data)
+    elif data is None:
+        return "null"
+    elif data is True:
+        return "true"
+    elif data is False:
+        return "false"
     elif type(data) is list:
         return "[" + spew(data) + "]"
     elif type(data) is tuple:
