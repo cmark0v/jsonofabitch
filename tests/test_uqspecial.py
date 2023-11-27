@@ -2,7 +2,7 @@ import unittest
 import jsonofabitch as jsob
 import json
 
-special = ["_", "-", "~", "$", "@", "&", "?", ".", "%"]
+special = ["_", "-", "~", "$", "@", "&", "?", ".", "%", "<", ">", "#","!","^","+","/","*"]
 datajsob = []
 datacheck = []
 for s in special:

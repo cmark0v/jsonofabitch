@@ -14,7 +14,7 @@
     object : ["{"] [pair ( (","|";" ) pair )*] [","|";"] ["}"]
     pair   : string (":" | "=") value 
     
-    UQSPECIAL : "_" | "-" | "~" | "$" | "@" | "&" | "?" | "." | "%"
+    UQSPECIAL : "_" | "-" | "~" | "$" | "@" | "&" | "?" | "." | "%" | ">" | "<" | "#" | "!" | "^" | "+" | "/" | "*"
     UQSTRING : (UQSPECIAL|LETTER) (UQSPECIAL|LETTER|DIGIT)*
     string : ESCAPED_STRING|UQSTRING
     %import common.CNAME

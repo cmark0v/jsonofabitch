@@ -36,7 +36,7 @@ JSLOB syntax
 - ``'true' -> True`` ``'false' -> False`` ``'null' -> None`` case sensitive
 - tuples in ``( )`` lists in ``[ ]`` objects separated by comma ``,`` or semicolon ``;`` . trailing comma/semicolon okay
 - dicts/JSLOB objects have keypairs separated by semicolon or comma, nested jslob objects(in lists, tuples or jslob objects) are terminated and separated simultaneously by ``;;`` or ``,,`` , IE: ``'[g=5,h=3]' -> [{'g': 5, 'h': 3}]`` and ``'[g=5;;h=3]' -> [{'g': 5}, {'h': 3}]``
-- strings - unquoted strings must be alphanumeric plus ``_-~$@&?.%``(no spaces,no unicode)  non-numeric first character. only double quotes can be used in the case of quoted strings, which do not have any restriction other than the escape of double quotes
+- strings - unquoted strings must be alphanumeric plus ``_-~$@&?.%<>#!^+/*``(no spaces,no unicode)  non-numeric first character. only double quotes can be used in the case of quoted strings, which do not have any restriction other than the escape of double quotes
 - scientific notation ``2e4`` resolves to $2.0 * 10^4$, always resolve to float
 - numbers with decimal present resolve to floats while others resolve to ints IE ``'3.0' -> 3.0`` and ``'3' -> 3`` ``'3.' -> 3.0``
 
